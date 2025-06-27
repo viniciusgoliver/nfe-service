@@ -4,20 +4,20 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { SessionUserRepository } from './session-user.repository';
-import { type SessionUserDTO } from './dtos/session-user.dto';
-import { ReturnSessionUserDTO } from './dtos/return-session-user.dto';
+import { SessionUserDTO } from './dtos/session-user.dto';
+import { SessionReturnSessionUserDTO } from './dtos/return-session-user.dto';
 
 @Injectable()
 export class SessionUserService {
   constructor(private readonly sessionUserRepository: SessionUserRepository) {}
 
-  async findAll(): Promise<ReturnSessionUserDTO[]> {
+  async findAll(): Promise<SessionReturnSessionUserDTO[]> {
     const { sessionUsers } = await this.sessionUserRepository.findAll();
 
     return sessionUsers;
   }
 
-  async findById(id: number): Promise<ReturnSessionUserDTO> {
+  async findById(id: number): Promise<SessionReturnSessionUserDTO> {
     await this.sessionUserExists(id);
     const sessionUser = await this.sessionUserRepository.findById(id);
 
@@ -28,7 +28,7 @@ export class SessionUserService {
     return sessionUser;
   }
 
-  async create(createDto: SessionUserDTO): Promise<ReturnSessionUserDTO> {
+  async create(createDto: SessionUserDTO): Promise<SessionReturnSessionUserDTO> {
     try {
       return await this.sessionUserRepository.create(createDto);
     } catch (error) {
@@ -44,7 +44,7 @@ export class SessionUserService {
     }
   }
 
-  async update(id: number, updateDto: SessionUserDTO): Promise<ReturnSessionUserDTO> {
+  async update(id: number, updateDto: SessionUserDTO): Promise<SessionReturnSessionUserDTO> {
     await this.sessionUserExists(id);
     
     return await this.sessionUserRepository.update(id, updateDto);

@@ -3,20 +3,20 @@ import { InvoiceRepository } from './invoice.repository';
 import { InvoiceService } from './invoice.service';
 import { InvoiceController } from './invoice.controller';
 import { PassportModule } from '@nestjs/passport';
-import { QueueProducerService } from 'src/utils/queue-producer.service';
 import { BullModule } from '@nestjs/bull';
+import { QueueModule } from 'src/utils/queue/queue.module';
 
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }), 
     BullModule.registerQueue({
       name: 'producer-queue',
-    })
+    }),
+    QueueModule,
   ],
   providers: [
     InvoiceService, 
-    InvoiceRepository, 
-    QueueProducerService
+    InvoiceRepository    
   ],
   controllers: [InvoiceController],
   exports: [PassportModule],

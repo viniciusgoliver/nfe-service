@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, MinLength } from 'class-validator';
 
-export class ResetPasswordDTO {
+export class AuthResetPasswordDTO {
   @IsNotEmpty({
     message: 'Informe uma senha',
   })

@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { InvoiceStatus } from '@prisma/client';
-import { type CreateInvoiceDTO } from './dtos/create-invoice.dto';
+import { InvoiceCreateInvoiceDTO } from './dtos/create-invoice.dto';
 
 @Injectable()
 export class InvoiceRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async create(createInvoiceDto: CreateInvoiceDTO): Promise<any> {
+  async create(createInvoiceDto: InvoiceCreateInvoiceDTO): Promise<any> {
     try {
       const { clientId, userId, items } = createInvoiceDto;
       const created = await this.prismaService.invoice.create({

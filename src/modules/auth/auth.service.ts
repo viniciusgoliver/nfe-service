@@ -6,21 +6,21 @@ import {
   HttpException,
   HttpStatus
 } from '@nestjs/common';
-import { type UserDTO } from '../user/dtos/user.dto';
-import { ReturnUserDTO } from '../user/dtos/return-user.dto';
-import { CredentialsDTO } from './dtos/credentials.dto';
+import { UserCreateDTO } from '../user/dtos/user-create.dto';
+import { UserReturnUserDTO } from '../user/dtos/return-user.dto';
+import { AuthCredentialsDTO } from './dtos/credentials.dto';
 import { JwtService } from '@nestjs/jwt';
-import { ReturnAuthUserDTO } from './dtos/return-auth-user.dto';
+import { AuthReturnAuthUserDTO } from './dtos/return-auth-user.dto';
 import { AuthRepository } from './auth.repository';
 import { MailService } from '../../utils/mail.service';
 import { UserService } from '../user/user.service';
-import { ResetPasswordDTO } from './dtos/reset-password.dto';
+import { AuthResetPasswordDTO } from './dtos/reset-password.dto';
 import { environmentConfig } from '../../configs';
-import { QueueProducerService } from '../../utils/queue-producer.service';
+import { QueueProducerService } from '../../utils/queue/queue-producer.service';
 import { validRefreshToken } from 'src/utils/helpers.util';
 import {v4} from "uuid";
 import { HttpService } from '@nestjs/axios';
-import { ReturnUserinfoDTO } from '../user/dtos/return-userinfo.dto';
+import { UserReturnUserinfoDTO } from '../user/dtos/return-userinfo.dto';
 
 @Injectable()
 export class AuthService {
@@ -37,7 +37,7 @@ export class AuthService {
     private readonly http: HttpService
   ) {}
 
-  async signUp(createUserDTO: UserDTO): Promise<void> {
+  async signUp(createUserDTO: UserCreateDTO): Promise<void> {
     
     if (createUserDTO.password !== createUserDTO.passwordConfirmation) {
       this.logger.error('As senhas não são iguais')
@@ -53,7 +53,7 @@ export class AuthService {
     await this.queueProducerService.signUpJob(createUserDTO)
   }
 
-  async saveUser(createDto: UserDTO): Promise<ReturnUserDTO> {
+  async saveUser(createDto: UserCreateDTO): Promise<UserReturnUserDTO> {
     try {
       if (createDto.password != createDto.passwordConfirmation) {
         throw new UnprocessableEntityException('As senhas não conferem');
@@ -82,7 +82,7 @@ export class AuthService {
     }
   }
 
-  async signIn(credentialsDto: CredentialsDTO): Promise<ReturnAuthUserDTO> {
+  async signIn(credentialsDto: AuthCredentialsDTO): Promise<AuthReturnAuthUserDTO> {
     const checkCredentials = await this.authRepository.checkCredentials(credentialsDto);    
     const sessionState = v4()
     const jwtPayload = {
@@ -121,7 +121,7 @@ export class AuthService {
     return { access_token, refresh_token, expire_in, refresh_expire_in, token_type };
   }
 
-  async refresh(refreshToken: string): Promise<ReturnAuthUserDTO> {    
+  async refresh(refreshToken: string): Promise<AuthReturnAuthUserDTO> {    
     try {
       validRefreshToken(refreshToken)
     
@@ -166,11 +166,11 @@ export class AuthService {
     }     
   }
 
-  async verifyUserById(id: number): Promise<ReturnUserDTO> {
+  async verifyUserById(id: number): Promise<UserReturnUserDTO> {
     return await this.userExists(id);
   }
 
-  async userExists(id: number): Promise<ReturnUserDTO> {
+  async userExists(id: number): Promise<UserReturnUserDTO> {
     const user = await this.authRepository.verifyUserById(id);
 
     if (!user) {
@@ -213,7 +213,7 @@ export class AuthService {
 
   async resetPassword(
     token: string,
-    resetPasswordDto: ResetPasswordDTO,
+    resetPasswordDto: AuthResetPasswordDTO,
   ): Promise<void> {
     return await this.userService.resetPassword(token, resetPasswordDto);
   }
@@ -228,7 +228,7 @@ export class AuthService {
     return await this.authRepository.findSessionUser(sessionState);
   }
 
-  async logout(user: ReturnUserinfoDTO): Promise<void> {
+  async logout(user: UserReturnUserinfoDTO): Promise<void> {
     return await this.authRepository.deleteSessionUserByIdUser(user.id);
   }
 }

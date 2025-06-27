@@ -4,20 +4,20 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { UserDTO } from '../user/dtos/user.dto';
+import { UserCreateDTO } from '../user/dtos/user-create.dto';
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
-import { ReturnUserDTO } from '../user/dtos/return-user.dto';
-import { CredentialsDTO } from './dtos/credentials.dto';
+import { UserReturnUserDTO } from '../user/dtos/return-user.dto';
+import { AuthCredentialsDTO } from './dtos/credentials.dto';
 import { hashPassword } from '../../utils/helpers.util'
 import { SessionUserDTO } from '../session-user/dtos/session-user.dto';
-import { ReturnSessionUserDTO } from '../session-user/dtos/return-session-user.dto';
+import { SessionReturnSessionUserDTO } from '../session-user/dtos/return-session-user.dto';
 
 @Injectable()
 export class AuthRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async signUp(data: UserDTO): Promise<ReturnUserDTO> {
+  async signUp(data: UserCreateDTO): Promise<UserReturnUserDTO> {
     let createDto = JSON.parse(JSON.stringify(data)).createUserDTO; 
     createDto.confirmationToken = crypto.randomBytes(32).toString('hex');
     createDto.salt = await bcrypt.genSalt();    
@@ -49,8 +49,8 @@ export class AuthRepository {
   }
 
   async checkCredentials(
-    credentialsDto: CredentialsDTO,
-  ): Promise<ReturnUserDTO> {
+    credentialsDto: AuthCredentialsDTO,
+  ): Promise<UserReturnUserDTO> {
     const { email, password } = credentialsDto;
 
     const user = await this.prismaService.users.findUnique({
@@ -91,7 +91,7 @@ export class AuthRepository {
     }
   }
 
-  async findById(id: number): Promise<ReturnUserDTO> {
+  async findById(id: number): Promise<UserReturnUserDTO> {
     const user = await this.prismaService.users.findUnique({
       where: { id: Number(id) }, 
     });
@@ -114,7 +114,7 @@ export class AuthRepository {
     return returnUser;
   }
 
-  async verifyUserById(id: number): Promise<ReturnUserDTO> {
+  async verifyUserById(id: number): Promise<UserReturnUserDTO> {
     const user = await this.prismaService.users.findUnique({
       where: { id: Number(id) }, 
     });
@@ -149,7 +149,7 @@ export class AuthRepository {
     return false;
   }
 
-  async createSessionUser(sessionUserDTO: SessionUserDTO): Promise<ReturnSessionUserDTO> {
+  async createSessionUser(sessionUserDTO: SessionUserDTO): Promise<SessionReturnSessionUserDTO> {
     const created = await this.prismaService.sessionUser.create({
       data: sessionUserDTO,
     });

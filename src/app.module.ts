@@ -15,6 +15,7 @@ import { environmentConfig, validationSchema } from './configs';
 import { DevtoolsModule } from '@nestjs/devtools-integration';
 import { SessionUserModule } from './modules/session-user/session-user.module';
 import { InvoiceModule } from './modules/invoice/invoice.module';
+import { QueueModule } from './utils/queue/queue.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { InvoiceModule } from './modules/invoice/invoice.module';
     AuthModule,
     SessionUserModule,
     InvoiceModule,
+    QueueModule,
   ],
   controllers: [AppController],
   providers: [

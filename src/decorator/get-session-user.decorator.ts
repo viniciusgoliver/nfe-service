@@ -1,7 +1,7 @@
-import { ReturnSessionUserDTO } from '../modules/session-user/dtos/return-session-user.dto';
+import { SessionReturnSessionUserDTO } from '../modules/session-user/dtos/return-session-user.dto';
 import { createParamDecorator } from '@nestjs/common';
 
-export const GetSessionUser = createParamDecorator((data, context): ReturnSessionUserDTO => {  
+export const GetSessionUser = createParamDecorator((data, context): SessionReturnSessionUserDTO => {  
   const request = context.switchToHttp().getRequest();
   const returnSessionUser = {
     id: request.sessionUser.id,

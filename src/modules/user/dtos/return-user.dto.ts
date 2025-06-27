@@ -1,6 +1,6 @@
 import { UserRole } from '@prisma/client';
 
-export class ReturnUserDTO {
+export class UserReturnUserDTO {
   id: number;
   guid: string
   email: string;

@@ -9,19 +9,19 @@ import {
   UseGuards,
   Patch,
 } from '@nestjs/common';
-import { UserDTO } from './dtos/user.dto';
+import { UserCreateDTO } from './dtos/user-create.dto';
 import { UserService } from './user.service';
-import { ReturnUserDTO } from './dtos/return-user.dto';
+import { UserReturnUserDTO } from './dtos/return-user.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from '../../guards/roles.guard';
 import { Role } from '../../decorator/role.decorator';
 import { UserRole } from '@prisma/client';
-import { ResetPasswordDTO } from '../auth/dtos/reset-password.dto';
+import { AuthResetPasswordDTO } from '../auth/dtos/reset-password.dto';
 import { UserUpdateDTO } from './dtos/user-update.dto';
 import { UserEntity } from './user.entity';
 import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { GetUser } from 'src/decorator/get-user.decorator';
-import { ReturnUserinfoDTO } from './dtos/return-userinfo.dto';
+import { UserReturnUserinfoDTO } from './dtos/return-userinfo.dto';
 
 @Controller({ path: 'users', version: '1' })
 @ApiTags('users')
@@ -32,7 +32,7 @@ export class UserController {
   @Role(UserRole.ADMIN)
   @UseGuards(AuthGuard(), RolesGuard)
   @ApiCreatedResponse({ type: UserEntity })
-  async create(@Body(ValidationPipe) userDto: UserDTO): Promise<object> {
+  async create(@Body(ValidationPipe) userDto: UserCreateDTO): Promise<object> {
     const user = await this.userService.create(userDto);
     return {
       user,
@@ -44,7 +44,7 @@ export class UserController {
   @Role(UserRole.ADMIN)
   @UseGuards(AuthGuard(), RolesGuard)
   @ApiOkResponse({ type: UserEntity, isArray: true })
-  async findAll(): Promise<ReturnUserDTO[]> {
+  async findAll(): Promise<UserReturnUserDTO[]> {
     return await this.userService.findAll();
   }
 
@@ -53,8 +53,8 @@ export class UserController {
   @ApiOkResponse({ type: UserEntity })
   async findById(
     @Param('id') id: number,
-    @GetUser() user: ReturnUserinfoDTO,
-  ): Promise<ReturnUserDTO | { message: string }> {
+    @GetUser() user: UserReturnUserinfoDTO,
+  ): Promise<UserReturnUserDTO | { message: string }> {
     if (user.id !== id && user.role !== UserRole.ADMIN) {
       return {
         message: 'Você não tem permissão para acessar este recurso',
@@ -73,8 +73,8 @@ export class UserController {
   async update(
     @Body(ValidationPipe) body: UserUpdateDTO,
     @Param('id') id: number,
-    @GetUser() user: ReturnUserinfoDTO,
-  ): Promise<ReturnUserDTO | { message: string }> {
+    @GetUser() user: UserReturnUserinfoDTO,
+  ): Promise<UserReturnUserDTO | { message: string }> {
     if (user.id !== id && user.role !== UserRole.ADMIN) {
       return {
         message: 'Você não tem permissão para acessar este recurso',
@@ -93,7 +93,7 @@ export class UserController {
   @ApiOkResponse({ type: UserEntity })
   async delete(
     @Param('id') id: number,
-    @GetUser() user: ReturnUserinfoDTO,
+    @GetUser() user: UserReturnUserinfoDTO,
   ): Promise<{ message: string }> {
     if (user.id === id) {
       return {
@@ -111,9 +111,9 @@ export class UserController {
   @UseGuards(AuthGuard())
   @ApiOkResponse({ type: UserEntity })
   async changePassword(
-    @Body(ValidationPipe) body: ResetPasswordDTO,
+    @Body(ValidationPipe) body: AuthResetPasswordDTO,
     @Param('id') id: number,
-    @GetUser() user: ReturnUserinfoDTO,
+    @GetUser() user: UserReturnUserinfoDTO,
   ): Promise<{ message: string }> {
     if (user.id !== id && user.role !== UserRole.ADMIN) {
       return {

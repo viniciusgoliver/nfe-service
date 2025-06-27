@@ -8,16 +8,20 @@ import {
   Patch,
   Param,
 } from '@nestjs/common';
-import { UserDTO } from '../user/dtos/user.dto';
+import { UserCreateDTO } from '../user/dtos/user-create.dto';
 import { AuthService } from './auth.service';
-import { CredentialsDTO } from './dtos/credentials.dto';
-import { ReturnAuthUserDTO } from './dtos/return-auth-user.dto';
+import { AuthCredentialsDTO } from './dtos/credentials.dto';
+import { AuthReturnAuthUserDTO } from './dtos/return-auth-user.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { ReturnUserinfoDTO } from '../user/dtos/return-userinfo.dto';
+import { UserReturnUserinfoDTO } from '../user/dtos/return-userinfo.dto';
 import { GetUser } from '../../decorator/get-user.decorator';
-import { ResetPasswordDTO } from './dtos/reset-password.dto';
-import { SendRecoverEmailDTO } from './dtos/send-recover-email.dto';
+import { AuthResetPasswordDTO } from './dtos/reset-password.dto';
+import { AuthSendRecoverEmailDTO } from './dtos/send-recover-email.dto';
 import { ApiTags } from '@nestjs/swagger';
+
+export class AuthRefreshTokenDTO {
+  refresh_token: string;
+}
 
 @Controller({ path: 'auth', version: '1' })
 @ApiTags('auth')
@@ -25,7 +29,7 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('signup')
-  async signUp(@Body(ValidationPipe) userDto: UserDTO): Promise<object> {    
+  async signUp(@Body(ValidationPipe) userDto: UserCreateDTO): Promise<object> {    
     const user = await this.authService.signUp(userDto);
     return {
       user,
@@ -36,31 +40,31 @@ export class AuthController {
 
   @Post('signin')
   async signIn(
-    @Body(ValidationPipe) credentialsDto: CredentialsDTO,
-  ): Promise<ReturnAuthUserDTO> {
+    @Body(ValidationPipe) credentialsDto: AuthCredentialsDTO,
+  ): Promise<AuthReturnAuthUserDTO> {
     return await this.authService.signIn(credentialsDto);
   }
 
   @Post('refresh')
   @UseGuards(AuthGuard())
   async refresh(
-    @Body(ValidationPipe) data: { refresh_token: string },
-  ): Promise<ReturnAuthUserDTO> {    
+    @Body(ValidationPipe) data: AuthRefreshTokenDTO,
+  ): Promise<AuthReturnAuthUserDTO> {    
     return await this.authService.refresh(data.refresh_token);
   }
 
   @Get('userinfo')
   @UseGuards(AuthGuard())
   async getUserinfo(
-    @GetUser() user: ReturnUserinfoDTO,
-  ): Promise<ReturnUserinfoDTO> {    
+    @GetUser() user: UserReturnUserinfoDTO,
+  ): Promise<UserReturnUserinfoDTO> {    
     return user;
   }
 
   @Get('logout')
   @UseGuards(AuthGuard())
   async logout(
-    @GetUser() user: ReturnUserinfoDTO,
+    @GetUser() user: UserReturnUserinfoDTO,
   ): Promise<{ message: string }> {
     await this.authService.logout(user);
     return {
@@ -79,7 +83,7 @@ export class AuthController {
 
   @Post('/send-recover-email')
   async sendRecoverPasswordEmail(
-    @Body(ValidationPipe) sendRecoverEmailDTO: SendRecoverEmailDTO,
+    @Body(ValidationPipe) sendRecoverEmailDTO: AuthSendRecoverEmailDTO,
   ): Promise<{ status: string; message: string }> {
     const { email } = sendRecoverEmailDTO;
     await this.authService.sendRecoverPasswordJob(email);
@@ -92,7 +96,7 @@ export class AuthController {
   @Patch('/reset-password/:token')
   async resetPassword(
     @Param('token') token: string,
-    @Body(ValidationPipe) data: ResetPasswordDTO,
+    @Body(ValidationPipe) data: AuthResetPasswordDTO,
   ): Promise<{ message: string }> {
     await this.authService.resetPassword(token, data);
     return {

@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { SessionUserDTO } from './dtos/session-user.dto';
 import { SessionUserService } from './session-user.service';
-import { ReturnSessionUserDTO } from './dtos/return-session-user.dto';
+import { SessionReturnSessionUserDTO } from './dtos/return-session-user.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from '../../guards/roles.guard';
 import { Role } from '../../decorator/role.decorator';
@@ -40,7 +40,7 @@ export class SessionUserController {
   @Role(UserRole.ADMIN)
   @UseGuards(AuthGuard(), RolesGuard)
   @ApiOkResponse({ type: SessionUserEntity, isArray: true })
-  async findAll(): Promise<ReturnSessionUserDTO[]> {
+  async findAll(): Promise<SessionReturnSessionUserDTO[]> {
     return await this.sessionUserService.findAll();
   }
 
@@ -50,7 +50,7 @@ export class SessionUserController {
   @ApiOkResponse({ type: SessionUserEntity })
   async findById(
     @Param('id') id: number,    
-  ): Promise<ReturnSessionUserDTO | { message: string }> {
+  ): Promise<SessionReturnSessionUserDTO | { message: string }> {
     return await this.sessionUserService.findById(id).catch((error) => {
       return {
         message: error,
@@ -65,7 +65,7 @@ export class SessionUserController {
   async update(
     @Body(ValidationPipe) body: SessionUserDTO,
     @Param('id') id: number,    
-  ): Promise<ReturnSessionUserDTO | { message: string }> {
+  ): Promise<SessionReturnSessionUserDTO | { message: string }> {
     return await this.sessionUserService.update(id, body).catch((error) => {
       return {
         message: error,

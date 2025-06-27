@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
 
-export class RecoverPasswordEmailDTO {
+export class AuthRecoverPasswordEmailDTO {
   @IsNotEmpty({
     message: 'Informe um endereço de email',
   })

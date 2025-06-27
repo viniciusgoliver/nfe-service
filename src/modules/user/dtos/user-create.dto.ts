@@ -10,7 +10,7 @@ import {
 import { UserRole } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class UserDTO {
+export class UserCreateDTO {
   @IsNotEmpty({
     message: 'Informe um endereço de email',
   })

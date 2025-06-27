@@ -1,4 +1,4 @@
-export class ReturnSessionUserDTO {  
+export class SessionReturnSessionUserDTO {  
   id: number;
   guid: string;
   user_id: number;

@@ -2,56 +2,35 @@ import {
   IsNotEmpty,
   IsUUID,
   IsInt,
-  Min,
   ArrayNotEmpty,
   ValidateNested,
   IsOptional,
 } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiExtraModels } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
+import { InvoiceItemDTO } from './invoice-item.dto';
 
-class InvoiceItemDTO {
-  @IsNotEmpty({
-    message: 'Informe o ID do produto',
-  })
-  @IsUUID()
-  @ApiProperty()
-  productId: string;
-
-  @IsNotEmpty({
-    message: 'Informe a quantidade do produto',
-  })
-  @IsInt()
-  @Min(1)
-  @ApiProperty()
-  quantity: number;
-}
-export class CreateInvoiceDTO {
+@ApiExtraModels(InvoiceItemDTO)
+export class InvoiceCreateInvoiceDTO {
   @IsOptional()
   @IsUUID()
   @ApiProperty()
   id?: string;
 
-  @IsNotEmpty({
-    message: 'Informe o ID do cliente',
-  })
+  @IsNotEmpty({ message: 'Informe o ID do cliente' })
   @IsUUID()
   @ApiProperty()
   clientId: string;
 
-  @IsNotEmpty({
-    message: 'Informe o ID do usuário',
-  })
+  @IsNotEmpty({ message: 'Informe o ID do usuário' })
   @IsInt()
   @ApiProperty()
   userId: number;
 
-  @IsNotEmpty({
-    message: 'Informe os itens da fatura',
-  })
+  @IsNotEmpty({ message: 'Informe os itens da fatura' })
   @ArrayNotEmpty()
   @ValidateNested({ each: true })
   @Type(() => InvoiceItemDTO)
-  @ApiProperty()
+  @ApiProperty({ type: [InvoiceItemDTO] })
   items: InvoiceItemDTO[];
 }

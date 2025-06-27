@@ -3,8 +3,8 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { InvoiceRepository } from './invoice.repository';
-import { type CreateInvoiceDTO } from './dtos/create-invoice.dto';
-import { QueueProducerService } from 'src/utils/queue-producer.service';
+import { InvoiceCreateInvoiceDTO } from './dtos/create-invoice.dto';
+import { QueueProducerService } from '../../utils/queue/queue-producer.service';
 
 @Injectable()
 export class InvoiceService {
@@ -13,7 +13,7 @@ export class InvoiceService {
     private readonly queueProducerService: QueueProducerService
   ) {}
 
-  async create(createInvoiceDto: CreateInvoiceDTO): Promise<any> {
+  async create(createInvoiceDto: InvoiceCreateInvoiceDTO): Promise<any> {
     try {
       const invoice = await this.invoiceRepository.create(createInvoiceDto);
       await this.queueProducerService.createInvoiceJob(createInvoiceDto)

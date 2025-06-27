@@ -4,21 +4,22 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { UserRepository } from './user.repository';
-import { type UserDTO } from './dtos/user.dto';
-import { ReturnUserDTO } from './dtos/return-user.dto';
-import { ResetPasswordDTO } from '../auth/dtos/reset-password.dto';
+import { UserCreateDTO } from './dtos/user-create.dto';
+import { UserReturnUserDTO } from './dtos/return-user.dto';
+import { AuthResetPasswordDTO } from '../auth/dtos/reset-password.dto';
+import { UserUpdateDTO } from './dtos/user-update.dto';
 
 @Injectable()
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async findAll(): Promise<ReturnUserDTO[]> {
+  async findAll(): Promise<UserReturnUserDTO[]> {
     const { users } = await this.userRepository.findAll();
 
     return users;
   }
 
-  async findById(id: number): Promise<ReturnUserDTO> {
+  async findById(id: number): Promise<UserReturnUserDTO> {
     await this.userExists(id);
     const user = await this.userRepository.findById(id);
 
@@ -29,7 +30,7 @@ export class UserService {
     return user;
   }
 
-  async create(createDto: UserDTO): Promise<ReturnUserDTO> {
+  async create(createDto: UserCreateDTO): Promise<UserReturnUserDTO> {
     try {
       if (createDto.password != createDto.passwordConfirmation) {
         throw new UnprocessableEntityException('As senhas não conferem');
@@ -49,7 +50,7 @@ export class UserService {
     }
   }
 
-  async update(id: number, updateDto: UserDTO): Promise<ReturnUserDTO> {
+  async update(id: number, updateDto: UserUpdateDTO): Promise<UserReturnUserDTO> {
     await this.userExists(id);
     if (updateDto.password != updateDto.passwordConfirmation) {
       throw new UnprocessableEntityException('As senhas não conferem');
@@ -83,14 +84,14 @@ export class UserService {
 
   async resetPassword(
     token,
-    resetPasswordDto: ResetPasswordDTO,
+    resetPasswordDto: AuthResetPasswordDTO,
   ): Promise<void> {
     return await this.userRepository.resetPassword(token, resetPasswordDto);
   }
 
   async changePassword(
     id: number,
-    changePasswordDto: ResetPasswordDTO,
+    changePasswordDto: AuthResetPasswordDTO,
   ): Promise<void> {
     await this.userExists(id);
     return await this.userRepository.changePassword(id, changePasswordDto);

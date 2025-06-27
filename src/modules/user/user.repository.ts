@@ -1,21 +1,21 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { UserDTO } from './dtos/user.dto';
+import { UserCreateDTO } from './dtos/user-create.dto';
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
-import { ReturnUserDTO } from './dtos/return-user.dto';
+import { UserReturnUserDTO } from './dtos/return-user.dto';
 import { hashPassword } from '../../utils/helpers.util';
-import { ResetPasswordDTO } from '../auth/dtos/reset-password.dto';
+import { AuthResetPasswordDTO } from '../auth/dtos/reset-password.dto';
 
 @Injectable()
 export class UserRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async findAll(): Promise<{ users: ReturnUserDTO[] }> {
+  async findAll(): Promise<{ users: UserReturnUserDTO[] }> {
     const users = await this.prismaService.users.findMany();
-    const returnUsers: ReturnUserDTO[] = [];
+    const returnUsers: UserReturnUserDTO[] = [];
     users.forEach((user) => {
-      const returnUser: ReturnUserDTO = {
+      const returnUser: UserReturnUserDTO = {
         id: user.id,
         guid: user.guid,
         email: user.email,
@@ -35,7 +35,7 @@ export class UserRepository {
     return { users: returnUsers };
   }
 
-  async findById(id: number): Promise<ReturnUserDTO> {
+  async findById(id: number): Promise<UserReturnUserDTO> {
     const user = await this.prismaService.users.findUnique({
       where: { id: Number(id) }, 
     });
@@ -58,7 +58,7 @@ export class UserRepository {
     return returnUser;
   }
 
-  async create(createDto: UserDTO): Promise<ReturnUserDTO> {
+  async create(createDto: UserCreateDTO): Promise<UserReturnUserDTO> {
     try {
       createDto.confirmationToken = crypto.randomBytes(32).toString('hex');
       createDto.salt = await bcrypt.genSalt();
@@ -89,7 +89,7 @@ export class UserRepository {
     }
   }
 
-  async update(id: number, updateDto: UserDTO): Promise<ReturnUserDTO> {
+  async update(id: number, updateDto: UserCreateDTO): Promise<UserReturnUserDTO> {
     const updated = await this.prismaService.users.update({
       where: { id: Number(id) }, 
       data: updateDto,
@@ -152,7 +152,7 @@ export class UserRepository {
 
   async resetPassword(
     token,
-    resetPasswordDto: ResetPasswordDTO,
+    resetPasswordDto: AuthResetPasswordDTO,
   ): Promise<void> {
     const user = await this.prismaService.users.findMany({
       where: { recoverToken: token },
@@ -177,7 +177,7 @@ export class UserRepository {
 
   async changePassword(
     id: number,
-    resetPasswordDto: ResetPasswordDTO,
+    resetPasswordDto: AuthResetPasswordDTO,
   ): Promise<void> {
     const user = await this.prismaService.users.findMany({
       where: { id: Number(id) }, 

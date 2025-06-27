@@ -5,7 +5,7 @@ import {
   ValidationPipe,
   UseGuards,
 } from '@nestjs/common';
-import { type CreateInvoiceDTO } from './dtos/create-invoice.dto';
+import { InvoiceCreateInvoiceDTO } from './dtos/create-invoice.dto';
 import { InvoiceService } from './invoice.service';
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from '../../guards/roles.guard';
@@ -22,9 +22,8 @@ export class InvoiceController {
   @Post()
   @Role(UserRole.USER)
   @UseGuards(AuthGuard(), RolesGuard)
-  @ApiCreatedResponse({ type: InvoiceEntity })
-  @ApiOkResponse({ type: InvoiceEntity, description: 'Fatura criada com sucesso' })
-  async create(@Body(ValidationPipe) createInvoiceDto: CreateInvoiceDTO): Promise<object> {
+  @ApiCreatedResponse({ type: InvoiceEntity })  
+  async create(@Body(ValidationPipe) createInvoiceDto: InvoiceCreateInvoiceDTO): Promise<object> {
     const invoice = await this.invoiceService.create(createInvoiceDto);
     return {
       invoice,

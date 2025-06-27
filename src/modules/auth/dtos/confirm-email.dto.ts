@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class ConfirmEmailDTO {
+export class AuthConfirmEmailDTO {
   id: string;
 
   @ApiProperty()

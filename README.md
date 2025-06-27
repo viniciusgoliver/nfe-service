@@ -1,38 +1,38 @@
-# Mpay Backend Service
+# Nfe Service
 
 ## 💻 Pré-requisitos
 
 Antes de começar, verifique se você atendeu aos seguintes requisitos:
 
-- Você instalou a versão minima `nodejs18` testes foram feitos na versão 18
+- Você instalou a versão minima `nodejs20` testes foram feitos na versão 18
 - Você instalou a versão mais recente de `yarn`
 - Você tem uma máquina `<Windows / Linux / Mac>`
 
-## 🚀 Clonando e Instalando ``<mpay-backend>``
+## 🚀 Clonando e Instalando ``<nfe-service>``
 
-Para clonar o repositorio `<mpay-backend>`, siga estas etapas:
+Para clonar o repositorio `<nfe-service>`, siga estas etapas:
 
 ```bash
-git clone git@ssh.dev.azure.com:v3/mpay-backend
+git clone git@github.com:viniciusgoliver/nfe-service.git
 ```
 
-Para instalar as dependencias `<mpay-backend>`, siga estas etapas:
+Para instalar as dependencias `<nfe-service>`, siga estas etapas:
 
 ```bash
 yarn install
 ```
 
-## ⚙️ Configurando ambiente `<mpay-backend>`
+## ⚙️ Configurando ambiente `<nfe-service>`
 
-Utilizar o arquivo `src/config/env/example.env` como base para a criação do seguinte arquivo de configuração:
+Utilizar o arquivo `src/dev.env` como base para a criação do seguinte arquivo de configuração:
 
-- `development.env`
+- `dev.env`
 
 > Aplicação utiliza schema de validação `src/config/validation/validation.ts`, caso não sejam providas a configurações requeridas, resultará em erro.
 
-## ☕ Usando `<mpay-backend>`
+## ☕ Usando `<nfe-service>`
 
-Para usar `<mpay-backend>`, siga estas etapas:
+Para usar `<nfe-service>`, siga estas etapas:
 
 ```bash
 # development

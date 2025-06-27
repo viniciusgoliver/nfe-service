@@ -1,8 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectQueue } from '@nestjs/bull'
 import { Queue } from 'bull'
-import { type UserDTO } from '../modules/user/dtos/user.dto'
-import { type CreateInvoiceDTO } from '../modules/invoice/dtos/create-invoice.dto'
+import { UserCreateDTO } from '../../modules/user/dtos/user-create.dto'
+import { InvoiceCreateInvoiceDTO } from '../../modules/invoice/dtos/create-invoice.dto'
 
 @Injectable()
 class QueueProducerService {
@@ -10,7 +10,7 @@ class QueueProducerService {
 
   constructor(@InjectQueue('producer-queue') private readonly queue: Queue) {}
 
-  async signUpJob(createUserDTO: UserDTO): Promise<void> {
+  async signUpJob(createUserDTO: UserCreateDTO): Promise<void> {
     await this.queue
       .add(
         'signUp-job',
@@ -52,7 +52,7 @@ class QueueProducerService {
       })
   }  
 
-  async createInvoiceJob(createInvoiceDto: CreateInvoiceDTO): Promise<void> {
+  async createInvoiceJob(createInvoiceDto: InvoiceCreateInvoiceDTO): Promise<void> {
     await this.queue
       .add(
         'createInvoice-job',

@@ -1,4 +1,4 @@
-export class ReturnUserinfoDTO {
+export class UserReturnUserinfoDTO {
   id: number;
   guid: string;
   name: string;

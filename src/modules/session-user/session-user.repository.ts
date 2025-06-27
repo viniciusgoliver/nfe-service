@@ -1,17 +1,17 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { SessionUserDTO } from './dtos/session-user.dto';
-import { ReturnSessionUserDTO } from './dtos/return-session-user.dto';
+import { SessionReturnSessionUserDTO } from './dtos/return-session-user.dto';
 
 @Injectable()
 export class SessionUserRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async findAll(): Promise<{ sessionUsers: ReturnSessionUserDTO[] }> {
+  async findAll(): Promise<{ sessionUsers: SessionReturnSessionUserDTO[] }> {
     const sessionUsers = await this.prismaService.sessionUser.findMany();
-    const returnSessionUsers: ReturnSessionUserDTO[] = [];
+    const returnSessionUsers: SessionReturnSessionUserDTO[] = [];
     sessionUsers.forEach((session) => {
-      const returnSesisonUser: ReturnSessionUserDTO = {
+      const returnSesisonUser: SessionReturnSessionUserDTO = {
         id: session.id,
         guid: session.guid,
         user_id: session.user_id,
@@ -29,7 +29,7 @@ export class SessionUserRepository {
     return { sessionUsers: returnSessionUsers };
   }
 
-  async findById(id: number): Promise<ReturnSessionUserDTO> {
+  async findById(id: number): Promise<SessionReturnSessionUserDTO> {
     const sessionUser = await this.prismaService.sessionUser.findUnique({
       where: { id: Number(id) }, 
     });
@@ -50,7 +50,7 @@ export class SessionUserRepository {
     return returnSessionUser;
   }
 
-  async create(createDto: SessionUserDTO): Promise<ReturnSessionUserDTO> {
+  async create(createDto: SessionUserDTO): Promise<SessionReturnSessionUserDTO> {
     try {
       createDto.user_id = createDto.user_id;
       createDto.session_state = createDto.session_state;
@@ -77,7 +77,7 @@ export class SessionUserRepository {
     }
   }
 
-  async update(id: number, updateDto: SessionUserDTO): Promise<ReturnSessionUserDTO> {
+  async update(id: number, updateDto: SessionUserDTO): Promise<SessionReturnSessionUserDTO> {
     const updated = await this.prismaService.sessionUser.update({
       where: { id: Number(id) }, 
       data: updateDto,

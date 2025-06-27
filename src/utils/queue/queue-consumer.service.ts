@@ -1,8 +1,8 @@
 import { Logger } from '@nestjs/common'
 import { Processor, Process, OnQueueCompleted, OnQueueActive, OnQueueFailed } from '@nestjs/bull'
 import { Job } from 'bull'
-import { AuthService } from '../modules/auth/auth.service'
-import { type UserDTO } from '../modules/user/dtos/user.dto'
+import { AuthService } from '../../modules/auth/auth.service'
+import { type UserCreateDTO } from '../../modules/user/dtos/user-create.dto'
 
 @Processor('producer-queue')
 class QueueConsumerService {
@@ -11,7 +11,7 @@ class QueueConsumerService {
   constructor(private readonly authService: AuthService) {}
 
   @Process('signUp-job')
-  async signUpJob(job: Job<UserDTO>): Promise<void> {
+  async signUpJob(job: Job<UserCreateDTO>): Promise<void> {
     const { data } = job
 
     await this.authService.saveUser(data)

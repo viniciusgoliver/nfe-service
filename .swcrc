@@ -16,7 +16,7 @@
       "compress": {
         "unused": true
       },
-      "mangle": true
+      "mangle": false
     }
   },
   "minify": false

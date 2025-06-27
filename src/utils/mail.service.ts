@@ -1,5 +1,5 @@
-import { RecoverPasswordEmailDTO } from '../modules/auth/dtos/recover-password-email.dto';
-import { SendConfirmationEmailDTO } from '../modules/auth/dtos/send-confirmation-email.dto';
+import { AuthRecoverPasswordEmailDTO } from '../modules/auth/dtos/recover-password-email.dto';
+import { AuthSendConfirmationEmailDTO } from '../modules/auth/dtos/send-confirmation-email.dto';
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { environmentConfig } from '../configs';
@@ -13,7 +13,7 @@ export class MailService {
   constructor(private readonly mailerService: MailerService) {}
 
   async sendConfirmationEmail(
-    sendConfirmationEmailDTO: SendConfirmationEmailDTO,
+    sendConfirmationEmailDTO: AuthSendConfirmationEmailDTO,
   ): Promise<void> {
     const { email, confirmationToken } = sendConfirmationEmailDTO;
     const mail = {
@@ -34,7 +34,7 @@ export class MailService {
   }
 
   async sendRecoverPasswordEmail(
-    recoverPassword: RecoverPasswordEmailDTO,
+    recoverPassword: AuthRecoverPasswordEmailDTO,
   ): Promise<void> {
     const { email, recoverToken } = recoverPassword;
     const mail = {
