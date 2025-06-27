@@ -1,0 +1,109 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id                Int           @id @default(autoincrement())
+  guid              String        @unique @default(uuid())
+  email             String        @unique
+  name              String
+  role              UserRole      @default(USER)
+  status            Boolean?      @default(true)
+  password          String
+  salt              String?
+  confirmationToken String?
+  recoverToken      String?
+  created_at        DateTime      @default(now())
+  updated_at        DateTime      @updatedAt
+  deleted_at        DateTime?
+  SessionUser       SessionUser[]
+  Invoice           Invoice?
+
+  @@map("users")
+}
+
+model SessionUser {
+  id            Int      @id @default(autoincrement())
+  guid          String   @unique @default(uuid())
+  user_id       Int      @unique
+  session_state String   @unique
+  from_ip       String
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+
+  user Users @relation(fields: [user_id], references: [id])
+
+  @@map("session_user")
+}
+
+model Client {
+  id        String    @id @default(uuid())
+  name      String
+  cnpj      String    @unique
+  ie        String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  invoices  Invoice[]
+
+  @@map("clients")
+}
+
+model Product {
+  id           String        @id @default(uuid())
+  name         String
+  code         String
+  price        Float
+  cfop         String
+  cst          String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  invoiceItems InvoiceItem[]
+
+  @@map("products")
+}
+
+model Invoice {
+  id        String        @id @default(uuid())
+  status    InvoiceStatus
+  clientId  String
+  userId    Int           @unique
+  xml       String?
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  items     InvoiceItem[]
+
+  client Client @relation(fields: [clientId], references: [id])
+  user   Users  @relation(fields: [userId], references: [id])
+
+  @@map("invoices")
+}
+
+model InvoiceItem {
+  id        String @id @default(uuid())
+  invoiceId String
+  productId String
+  quantity  Int
+  total     Float
+
+  invoice Invoice @relation(fields: [invoiceId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+
+  @@map("invoice_items")
+}
+
+enum InvoiceStatus {
+  PROCESSING
+  AUTHORIZED
+  REJECTED
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}

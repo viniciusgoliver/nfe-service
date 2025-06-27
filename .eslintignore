@@ -1,0 +1,5 @@
+*.json
+node_modules
+dist
+jest.config.js
+jest-e2e.config.js

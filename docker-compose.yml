@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_DB: nfe
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - nfe-network
+
+  redis:
+    container_name: redis
+    image: redis:6.0-alpine
+    command: redis-server
+    ports:
+      - 6379:6379
+    networks:
+      - nfe-network
+
+  api:
+    container_name: api
+    build: .
+    restart: always
+    ports:
+      - '3000:3000'
+    depends_on:
+      - postgres
+    env_file:
+      - dev.env
+    environment:
+      HUSKY: 0
+    networks:
+      - nfe-network
+
+volumes:
+  pgdata:
+
+networks:
+  nfe-network:
+    driver: bridge

@@ -1,0 +1,48 @@
+{{#each releases}}
+
+{{#if tag}}
+> {{title}}
+* {{isoDate}}
+{{/if}}
+
+{{#commit-list
+commits
+heading='> Features'
+message='(feat: )|(Feature: )'
+exclude='(fix: )|(Fix: )|(refactor: )'}}
+* {{subject}} ([`{{shorthash}}`]({{href}}))
+{{/commit-list}}
+
+{{#commit-list
+commits
+heading='> Tests'
+message='(test: )|(Test: )'
+exclude='(fix: )|(Fix: )|(refactor: )'}}
+* {{subject}} ([`{{shorthash}}`]({{href}}))
+{{/commit-list}}
+
+{{#commit-list
+commits
+heading='> Refactoring'
+message='(refactor: )|(refactor: )'
+exclude='(fix: )|(Fix: )|(Feature: )|(feature: )|(chore: )|(Chore: )' }}
+* {{subject}} ([`{{shorthash}}`]({{href}}))
+{{/commit-list}}
+
+{{#commit-list
+commits
+heading='> Fixes'
+message='(fix: )|(Fix: )'
+exclude='(refactor: )|(Feat: )|(feat: )'}}
+* {{subject}} ([`{{shorthash}}`]({{href}}))
+{{/commit-list}}
+
+{{#commit-list
+commits
+heading='> Configurations'
+message='(chore: )|(Chore: )'
+exclude='(fix: )|(Fix: )|(refactor: )|(feat: )|(Feat: )'}}
+* {{subject}} ([`{{shorthash}}`]({{href}}))
+{{/commit-list}}
+
+{{/each}}
