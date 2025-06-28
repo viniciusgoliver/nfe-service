@@ -44,3 +44,9 @@ docker-compose up --build
 
 # Rode as migrations (inicializa o banco de dados)
 docker-compose exec app npx prisma migrate deploy
+
+## 📝 Observações
+
+- **O serviço de envio à SEFAZ está simulado nesta versão.**
+- Toda a validação de NF-e e processamento é feita localmente, garantindo isolamento e segurança para rodar/testar sem dependências externas.
+- Para integração real, basta adaptar o método de envio em `InvoiceService` para consumir o webservice oficial da SEFAZ conforme documentação técnica do órgão.
