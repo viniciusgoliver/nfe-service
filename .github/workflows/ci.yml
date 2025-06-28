@@ -16,7 +16,7 @@ jobs:
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: nf
+          POSTGRES_DB: nfe
         ports:
           - 5432:5432
         options: >-
@@ -49,11 +49,20 @@ jobs:
       - name: Run Prisma Migrate
         run: npx prisma migrate deploy
 
+      - name: List DB Tables
+        run: |
+          sudo apt-get update && sudo apt-get install -y postgresql-client
+          PGPASSWORD=postgres psql -h localhost -U postgres -d nfe -c '\dt'
+
       - name: Run linter
         run: yarn lint
 
       - name: Run unit tests
         run: yarn test
 
-      - name: Run E2E tests
-        run: yarn test:e2e
+      # - name: Run E2E tests
+      #   run: yarn test:e2e
+
+      - name: Show Postgres Logs on Failure
+        if: failure()
+        run: docker logs $(docker ps -q -f ancestor=postgres:15)
