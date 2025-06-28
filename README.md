@@ -63,16 +63,12 @@ Isso garante qualidade, rastreabilidade e validação de todo código antes de s
 ## 🏁 Como rodar localmente
 
 ```bash
-# Clone o repositório
 git clone https://github.com/viniciusgoliver/nfe-service.git
 cd nfe-service
 
-# Configure as variáveis de ambiente
 cp dev.env .env
 
-# Suba o ambiente (aplicação, banco e dependências)
 docker-compose up --build
 
-# Rode as migrations (inicializa o banco de dados)
 docker-compose exec app npx prisma migrate deploy
 ```
