@@ -1,0 +1,15 @@
+name: Pipeline
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
+
+jobs:
+  trigger-cd:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger CD
+        run: echo "CI passou, pode rodar o CD"
