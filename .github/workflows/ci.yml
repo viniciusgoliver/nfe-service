@@ -8,22 +8,7 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest
-
-    services:
-      postgres:
-        image: postgres:15
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: nfe
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+    runs-on: ubuntu-latest    
 
     steps:
       - uses: actions/checkout@v4
@@ -37,22 +22,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Set up environment variables
-        run: cp dev.env .env
-
-      - name: Wait for Postgres
-        run: |
-          until pg_isready -h localhost -p 5432 -U postgres; do
-            echo "Waiting for Postgres..."
-            sleep 2
-          done
-
-      - name: Run Prisma Migrate
-        run: npx prisma migrate deploy
-
-      - name: List DB Tables
-        run: |
-          sudo apt-get update && sudo apt-get install -y postgresql-client
-          PGPASSWORD=postgres psql -h localhost -U postgres -d nfe -c '\dt'
+        run: cp dev.env .env            
 
       - name: Run linter
         run: yarn lint
@@ -60,9 +30,5 @@ jobs:
       - name: Run unit tests
         run: yarn test
 
-      # - name: Run E2E tests
-      #   run: yarn test:e2e
-
-      - name: Show Postgres Logs on Failure
-        if: failure()
-        run: docker logs $(docker ps -q -f ancestor=postgres:15)
+      - name: Run E2E tests
+        run: yarn test:e2e
