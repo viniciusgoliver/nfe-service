@@ -1,9 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectQueue } from '@nestjs/bull'
 import { Queue } from 'bull'
-import { UserCreateDTO } from '../../modules/user/dtos/user-create.dto'
-import { InvoiceCreateInvoiceDTO } from '../../modules/invoice/dtos/create-invoice.dto'
-import { InvoiceReturnDTO } from 'src/modules/invoice/dtos/return-invoice.dto'
+import { type UserCreateDTO } from '../../modules/user/dtos/user-create.dto'
+import { type InvoiceReturnDTO } from 'src/modules/invoice/dtos/return-invoice.dto'
 
 @Injectable()
 class QueueProducerService {
@@ -30,7 +29,7 @@ class QueueProducerService {
       .catch((err) => {
         this.logger.error(err)
       })
-  }  
+  }
 
   async sendRecoverPasswordJob(email: string): Promise<void> {
     await this.queue
@@ -51,7 +50,7 @@ class QueueProducerService {
       .catch((err) => {
         this.logger.error(err)
       })
-  }  
+  }
 
   async emmitInvoice(invoice: InvoiceReturnDTO): Promise<void> {
     await this.queue
@@ -63,7 +62,7 @@ class QueueProducerService {
           backoff: {
             type: 'exponential',
             delay: 1000
-          },          
+          }
         }
       )
       .then((job) => {

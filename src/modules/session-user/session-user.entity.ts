@@ -1,25 +1,24 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger'
 
 export class SessionUserEntity {
   @ApiProperty()
-  id: number;
+  id: number
 
   @ApiProperty()
-  guid: string;
-  
-  @ApiProperty()
-  user_id: number;
+  guid: string
 
   @ApiProperty()
-  session_state: string;
+  user_id: number
 
   @ApiProperty()
-  from_ip: string;
+  session_state: string
 
   @ApiProperty()
-  created_at: Date;
+  from_ip: string
 
   @ApiProperty()
-  updated_at: Date;
-  
+  created_at: Date
+
+  @ApiProperty()
+  updated_at: Date
 }

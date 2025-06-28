@@ -1,27 +1,27 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger'
 
 export class ProductDTO {
   @ApiProperty()
-  id: string;
+  id: string
 
   @ApiProperty()
-  name: string;
+  name: string
 
   @ApiProperty()
-  code: string;
+  code: string
 
   @ApiProperty()
-  price: number;
+  price: number
 
   @ApiProperty()
-  cfop: string;
+  cfop: string
 
   @ApiProperty()
-  cst: string;
+  cst: string
 
   @ApiProperty()
-  createdAt: string;
+  createdAt: string
 
   @ApiProperty()
-  updatedAt: string;
+  updatedAt: string
 }

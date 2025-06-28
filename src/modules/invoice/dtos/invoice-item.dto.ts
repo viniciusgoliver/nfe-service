@@ -1,22 +1,22 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { ProductDTO } from './invoice-produto.dto';
+import { ApiProperty } from '@nestjs/swagger'
+import { ProductDTO } from './invoice-produto.dto'
 
 export class InvoiceItemDTO {
   @ApiProperty()
-  id: string;
+  id: string
 
   @ApiProperty()
-  invoiceId: string;
+  invoiceId: string
 
   @ApiProperty()
-  productId: string;
+  productId: string
 
   @ApiProperty()
-  quantity: number;
+  quantity: number
 
   @ApiProperty()
-  total: number;
+  total: number
 
   @ApiProperty({ type: ProductDTO })
-  product: ProductDTO;
+  product: ProductDTO
 }

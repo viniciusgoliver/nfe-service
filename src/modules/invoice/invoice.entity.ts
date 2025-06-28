@@ -1,30 +1,30 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger'
 
 export class InvoiceEntity {
   @ApiProperty()
-  id: string;
+  id: string
 
   @ApiProperty()
-  status: string;
+  status: string
 
   @ApiProperty()
-  clientId: string;
+  clientId: string
 
   @ApiProperty()
-  userId: number;
+  userId: number
 
   @ApiProperty()
-  xml: string;
+  xml: string
 
   @ApiProperty()
-  createdAt: Date;
+  createdAt: Date
 
   @ApiProperty()
-  updatedAt: Date;
+  updatedAt: Date
 
   @ApiProperty()
-  items: {
-    productId: string;
-    quantity: number;
-  }[];
+  items: Array<{
+    productId: string
+    quantity: number
+  }>
 }

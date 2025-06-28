@@ -1,36 +1,36 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger'
 
 export class UserEntity {
   @ApiProperty()
-  id: string;
+  id: string
 
   @ApiProperty()
-  email: string;
+  email: string
 
   @ApiProperty()
-  name: string;
+  name: string
 
   @ApiProperty()
-  role: string;
+  role: string
 
   @ApiProperty()
-  status: boolean;
+  status: boolean
 
   @ApiProperty()
-  password: string;
+  password: string
 
   @ApiProperty()
-  salt: string;
+  salt: string
 
   @ApiProperty()
-  confirmationToken: string;
+  confirmationToken: string
 
   @ApiProperty()
-  recoverToken: string;
+  recoverToken: string
 
   @ApiProperty()
-  created_at: Date;
+  created_at: Date
 
   @ApiProperty()
-  updated_at: Date;
+  updated_at: Date
 }

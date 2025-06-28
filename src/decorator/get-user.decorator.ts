@@ -1,9 +1,9 @@
-import { UserReturnUserinfoDTO } from '../modules/user/dtos/return-userinfo.dto';
-import { createParamDecorator } from '@nestjs/common';
+import { type UserReturnUserinfoDTO } from '../modules/user/dtos/return-userinfo.dto'
+import { createParamDecorator } from '@nestjs/common'
 
-export const GetUser = createParamDecorator((data, ctx): UserReturnUserinfoDTO => {  
-  const request = ctx.switchToHttp().getRequest();
-  const user = request.user;
+export const GetUser = createParamDecorator((data, ctx): UserReturnUserinfoDTO => {
+  const request = ctx.switchToHttp().getRequest()
+  const user = request.user
   const returnUser = {
     id: user.id,
     guid: user.guid,
@@ -11,7 +11,7 @@ export const GetUser = createParamDecorator((data, ctx): UserReturnUserinfoDTO =
     email: user.email,
     role: user.role,
     status: user.status,
-    createdAt: user.createdAt,
-  };
-  return returnUser;
-});
+    createdAt: user.createdAt
+  }
+  return returnUser
+})

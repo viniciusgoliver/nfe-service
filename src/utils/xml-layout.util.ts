@@ -1,15 +1,15 @@
 interface InvoiceXMLData {
   client: {
-    cnpj: string;
-    name: string;
-  };
-  items: {
-    name: string;
-    quantity: number;
-    price: number;
-  }[];
-  status: string;
-  valor: number;
+    cnpj: string
+    name: string
+  }
+  items: Array<{
+    name: string
+    quantity: number
+    price: number
+  }>
+  status: string
+  valor: number
 }
 
 export function xmlLayout(data: InvoiceXMLData) {
@@ -25,14 +25,18 @@ export function xmlLayout(data: InvoiceXMLData) {
             </destinatario>
             <valor>${Number(data.valor).toFixed(2)}</valor>
             <produtos>
-              ${data.items.map(prod => `
+              ${data.items
+                .map((prod) =>
+                  `
               <produto>
                 <nome>${prod.name}</nome>
                 <quantidade>${prod.quantity}</quantidade>
                 <preco>${Number(prod.price).toFixed(2)}</preco>
               </produto>
-              `.trim()).join('\n    ')}
+              `.trim()
+                )
+                .join('\n    ')}
             </produtos>
             <status>${data.status}</status>
-          </nfe>`;
+          </nfe>`
 }

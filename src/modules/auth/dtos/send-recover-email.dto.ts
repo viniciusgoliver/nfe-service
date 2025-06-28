@@ -1,16 +1,16 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger'
+import { IsEmail, IsNotEmpty } from 'class-validator'
 
 export class AuthSendRecoverEmailDTO {
   @IsNotEmpty({
-    message: 'Informe um endereço de email',
+    message: 'Informe um endereço de email'
   })
   @IsEmail(
     {},
     {
-      message: 'Informe um endereço de email válido',
-    },
+      message: 'Informe um endereço de email válido'
+    }
   )
   @ApiProperty()
-  email: string;
+  email: string
 }

@@ -1,32 +1,32 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { ClientDTO } from './invoice-client.dto';
-import { InvoiceItemDTO } from './invoice-item.dto';
+import { ApiProperty } from '@nestjs/swagger'
+import { ClientDTO } from './invoice-client.dto'
+import { InvoiceItemDTO } from './invoice-item.dto'
 
 export class InvoiceDataDTO {
   @ApiProperty()
-  id: string;
+  id: string
 
   @ApiProperty()
-  status: string;
+  status: string
 
   @ApiProperty()
-  clientId: string;
+  clientId: string
 
   @ApiProperty()
-  userId: number;
+  userId: number
 
   @ApiProperty({ nullable: true })
-  xml: string | null;
+  xml: string | null
 
   @ApiProperty()
-  createdAt: string;
+  createdAt: string
 
   @ApiProperty()
-  updatedAt: string;
+  updatedAt: string
 
   @ApiProperty({ type: ClientDTO })
-  client: ClientDTO;
+  client: ClientDTO
 
   @ApiProperty({ type: [InvoiceItemDTO] })
-  items: InvoiceItemDTO[];
+  items: InvoiceItemDTO[]
 }

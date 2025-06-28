@@ -23,6 +23,13 @@ module.exports = {
   },
   ignorePatterns: ['.eslintrc.js', 'schema.gql'],
   rules: {
+    '@typescript-eslint/prefer-nullish-coalescing': 'off',
+    '@typescript-eslint/consistent-type-assertions': 'off',
+    '@typescript-eslint/no-unsafe-argument': 'off',
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/naming-convention': 'off',
+    '@typescript-eslint/unbound-method': 'off',
+    '@typescript-eslint/no-unnecessary-boolean-literal-compares': 'off',
     '@typescript-eslint/strict-boolean-expressions': 'off',
     '@typescript-eslint/consistent-type-definitions': 'off',
     '@typescript-eslint/comma-spacing': 'off',
