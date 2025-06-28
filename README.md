@@ -1,5 +1,7 @@
 # NF-e Service
 
+![CI](https://github.com/viniciusgoliver/nfe-service/actions/workflows/ci.yml/badge.svg)
+
 Microserviço para emissão e gerenciamento de Notas Fiscais Eletrônicas (NF-e), desenvolvido em Node.js (NestJS), Prisma ORM e PostgreSQL.
 
 ---
