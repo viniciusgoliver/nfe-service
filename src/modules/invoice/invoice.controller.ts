@@ -1,4 +1,4 @@
-import { Controller, Post, Body, ValidationPipe, UseGuards, Get, Param, Res } from '@nestjs/common'
+import { Controller, Post, Body, ValidationPipe, UseGuards, Get, Param, Res, HttpCode } from '@nestjs/common'
 import { InvoiceCreateInvoiceDTO } from './dtos/create-invoice.dto'
 import { InvoiceService } from './invoice.service'
 import { AuthGuard } from '@nestjs/passport'
@@ -6,7 +6,8 @@ import { RolesGuard } from '../../guards/roles.guard'
 import { Role } from '../../decorator/role.decorator'
 import { UserRole } from '@prisma/client'
 import { InvoiceEntity } from './invoice.entity'
-import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
+import { ApiBody, ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
+import { WebhookRetornoSefazDTO } from './dtos/webhook-retorno-sefaz.dto'
 
 @Controller({ path: 'nfe', version: '1' })
 @ApiTags('nfe')
@@ -44,5 +45,15 @@ export class InvoiceController {
     const invoice = await this.invoiceService.findById(id)
 
     return invoice
+  }
+
+  @Post('/webhook/retorno-sefaz')
+  @ApiOperation({ summary: 'Recebe retorno (simulado) da SEFAZ e atualiza status da NF-e' })
+  @ApiBody({ type: WebhookRetornoSefazDTO })
+  @HttpCode(200)
+  async retornoSefaz(@Body() body: WebhookRetornoSefazDTO) {
+    const { invoiceId, status, protocol, xml, message } = body;
+    await this.invoiceService.processSefazCallback(invoiceId, status, protocol, xml, message);
+    return { status: 'ok', invoiceId };
   }
 }

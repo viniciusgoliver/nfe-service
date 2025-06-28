@@ -64,10 +64,19 @@ export class InvoiceRepository {
     })
   }
 
-  async updateStatus(id: string, status: InvoiceStatus, xml: string): Promise<any> {
-    return this.prismaService.invoice.update({
-      where: { id },
-      data: { status, xml }
-    })
+  async updateStatus(id: string,
+    status: InvoiceStatus,
+    xml?: string,
+    protocol?: string,
+    message?: string): Promise<any> {
+      return this.prismaService.invoice.update({
+        where: { id },
+        data: {
+          status,
+          xml,
+          protocol,
+          message,
+        },
+      });
   }
 }

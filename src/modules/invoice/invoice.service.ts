@@ -71,4 +71,15 @@ export class InvoiceService {
 
     return invoice
   }
+
+  async processSefazCallback(
+    invoiceId: string,
+    status: 'AUTHORIZED' | 'REJECTED',
+    protocol?: string,
+    xml?: string,
+    message?: string
+  ): Promise<void> {    
+    await this.invoiceRepository.updateStatus(invoiceId, status, xml, protocol, message);
+    this.logger.log(`[SEFAZ CALLBACK] NF-e ${invoiceId} status=${status} protocol=${protocol} message=${message}`);    
+  }
 }

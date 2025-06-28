@@ -77,6 +77,8 @@ model Invoice {
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
   items     InvoiceItem[]
+  protocol  String?
+  message   String?
 
   client Client @relation(fields: [clientId], references: [id])
   user   Users  @relation(fields: [userId], references: [id])
