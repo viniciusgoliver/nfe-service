@@ -14,7 +14,7 @@ Microserviço para emissão e gerenciamento de Notas Fiscais Eletrônicas (NF-e)
 
 ## ⚙️ Tecnologias
 
-- Node.js 18+ / NestJS
+- Node.js 20+ / NestJS
 - Prisma ORM
 - PostgreSQL
 - Docker / Docker Compose
