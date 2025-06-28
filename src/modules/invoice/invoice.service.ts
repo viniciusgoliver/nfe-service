@@ -1,10 +1,13 @@
 import {
+  BadRequestException,
   Injectable,
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { InvoiceRepository } from './invoice.repository';
 import { InvoiceCreateInvoiceDTO } from './dtos/create-invoice.dto';
 import { QueueProducerService } from '../../utils/queue/queue-producer.service';
+import { InvoiceStatus } from '@prisma/client';
+import { validateXmlWithXsd } from 'src/utils/xml-validator.util';
 
 @Injectable()
 export class InvoiceService {
@@ -15,8 +18,9 @@ export class InvoiceService {
 
   async create(createInvoiceDto: InvoiceCreateInvoiceDTO): Promise<any> {
     try {
-      const invoice = await this.invoiceRepository.create(createInvoiceDto);
-      await this.queueProducerService.createInvoiceJob(createInvoiceDto)
+      const invoiceCreated = await this.invoiceRepository.create(createInvoiceDto);
+      const invoice = await this.invoiceRepository.findByIdXml(invoiceCreated.id);
+      await this.queueProducerService.emmitInvoice(invoice);
 
       return invoice;
     } catch (error) {
@@ -28,4 +32,40 @@ export class InvoiceService {
       throw error;
     }
   }  
+
+  async findByIdXml(id: string): Promise<string> {
+    const invoice = await this.invoiceRepository.findById(id);
+
+    if (!invoice) throw new UnprocessableEntityException('Fatura não encontrada');
+
+    if (invoice.status !== InvoiceStatus.AUTHORIZED) throw new BadRequestException('NF-e não autorizada');
+    
+    const xmlString = invoice.xml;    
+    
+    try {
+      validateXmlWithXsd(xmlString);      
+    } catch (e) {      
+      throw new BadRequestException(e.message);
+    }
+
+    return invoice.xml;
+  }
+
+  async findById(id: string): Promise<any> {
+    const invoice = await this.invoiceRepository.findById(id);
+
+    if (!invoice) throw new UnprocessableEntityException('Fatura não encontrada');
+
+    if (invoice.status !== InvoiceStatus.AUTHORIZED) throw new BadRequestException('NF-e não autorizada');
+
+    return invoice;
+  }
+
+  async updateStatus(id: string, status: InvoiceStatus, xml: string): Promise<any> {
+    const invoice = await this.invoiceRepository.updateStatus(id, status, xml);
+
+    if (!invoice) throw new UnprocessableEntityException('Fatura não encontrada');
+
+    return invoice;
+  }
 }

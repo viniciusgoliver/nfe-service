@@ -1,66 +1,36 @@
-# Nfe Service
+# NF-e Service
 
-## 💻 Pré-requisitos
+Microserviço para emissão e gerenciamento de Notas Fiscais Eletrônicas (NF-e), desenvolvido em Node.js com NestJS, Prisma ORM e PostgreSQL.
 
-Antes de começar, verifique se você atendeu aos seguintes requisitos:
+## 🚀 Funcionalidades
 
-- Você instalou a versão minima `nodejs20` testes foram feitos na versão 18
-- Você instalou a versão mais recente de `yarn`
-- Você tem uma máquina `<Windows / Linux / Mac>`
+- Cadastro e autenticação de usuários (JWT)
+- Emissão, consulta e listagem de NF-e
+- Validação XML via XSD
+- Fila assíncrona para processamento de notas
+- Recuperação e confirmação de email
+- Documentação OpenAPI/Swagger
+- Infraestrutura pronta para Docker
 
-## 🚀 Clonando e Instalando ``<nfe-service>``
+## ⚙️ Tecnologias
 
-Para clonar o repositorio `<nfe-service>`, siga estas etapas:
+- Node.js 18+ / NestJS
+- Prisma ORM
+- PostgreSQL
+- Docker / Docker Compose
+- JWT Auth
+- Jest (unit e2e)
+- Winston Logger
+- Husky, Eslint, Prettier, Commitlint
 
-```bash
-git clone git@github.com:viniciusgoliver/nfe-service.git
-```
-
-Para instalar as dependencias `<nfe-service>`, siga estas etapas:
-
-```bash
-yarn install
-```
-
-## ⚙️ Configurando ambiente `<nfe-service>`
-
-Utilizar o arquivo `src/dev.env` como base para a criação do seguinte arquivo de configuração:
-
-- `dev.env`
-
-> Aplicação utiliza schema de validação `src/config/validation/validation.ts`, caso não sejam providas a configurações requeridas, resultará em erro.
-
-## ☕ Usando `<nfe-service>`
-
-Para usar `<nfe-service>`, siga estas etapas:
+## 🏁 Como rodar localmente
 
 ```bash
-# development
-$ yarn start:dev
+git clone https://github.com/viniciusgoliver/nfe-service.git
+cd nfe-service
 
-# production
-$ yarn start:prod
-```
+cp dev.env .env
 
-## Testes
+docker-compose up --build
 
-```bash
-# unit tests
-$ yarn test
-
-# e2e tests
-$ yarn test:e2e
-
-# test coverage
-$ yarn test:cov
-```
-
-## Gerando arquivo de change log
-
-```bash
-yarn release # only changelog file
-yarn changelog:minor # x.y.x
-yarn changelog:major # y.x.x
-yarn changelog:patch # x.x.y
-yarn changelog:alpha # x.x.x-alpha.0
-```
+docker-compose exec app npx prisma migrate deploy

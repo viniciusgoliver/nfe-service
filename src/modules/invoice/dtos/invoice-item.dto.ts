@@ -1,24 +1,22 @@
-import {
-  IsNotEmpty,
-  IsUUID,
-  IsInt,
-  Min,  
-} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { ProductDTO } from './invoice-produto.dto';
 
 export class InvoiceItemDTO {
-  @IsNotEmpty({
-    message: 'Informe o ID do produto',
-  })
-  @IsUUID()
+  @ApiProperty()
+  id: string;
+
+  @ApiProperty()
+  invoiceId: string;
+
   @ApiProperty()
   productId: string;
 
-  @IsNotEmpty({
-    message: 'Informe a quantidade do produto',
-  })
-  @IsInt()
-  @Min(1)
   @ApiProperty()
   quantity: number;
+
+  @ApiProperty()
+  total: number;
+
+  @ApiProperty({ type: ProductDTO })
+  product: ProductDTO;
 }

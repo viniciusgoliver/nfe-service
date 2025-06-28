@@ -3,6 +3,7 @@ import { InjectQueue } from '@nestjs/bull'
 import { Queue } from 'bull'
 import { UserCreateDTO } from '../../modules/user/dtos/user-create.dto'
 import { InvoiceCreateInvoiceDTO } from '../../modules/invoice/dtos/create-invoice.dto'
+import { InvoiceReturnDTO } from 'src/modules/invoice/dtos/return-invoice.dto'
 
 @Injectable()
 class QueueProducerService {
@@ -52,22 +53,21 @@ class QueueProducerService {
       })
   }  
 
-  async createInvoiceJob(createInvoiceDto: InvoiceCreateInvoiceDTO): Promise<void> {
+  async emmitInvoice(invoice: InvoiceReturnDTO): Promise<void> {
     await this.queue
       .add(
-        'createInvoice-job',
-        { createInvoiceDto },
+        'emit-invoice',
+        { invoice },
         {
           attempts: 3,
           backoff: {
             type: 'exponential',
             delay: 1000
-          },
-          jobId: createInvoiceDto.id
+          },          
         }
       )
       .then((job) => {
-        this.logger.log(`Job ${job.id} added to queue`)
+        this.logger.log(`Job ${job.id} added to queue for invoice emission`)
       })
       .catch((err) => {
         this.logger.error(err)

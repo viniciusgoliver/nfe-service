@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { InvoiceRepository } from './invoice.repository';
 import { InvoiceService } from './invoice.service';
 import { InvoiceController } from './invoice.controller';
@@ -12,13 +12,13 @@ import { QueueModule } from 'src/utils/queue/queue.module';
     BullModule.registerQueue({
       name: 'producer-queue',
     }),
-    QueueModule,
+    forwardRef(() => QueueModule),
   ],
   providers: [
     InvoiceService, 
-    InvoiceRepository    
+    InvoiceRepository,    
   ],
   controllers: [InvoiceController],
-  exports: [PassportModule],
+  exports: [PassportModule, InvoiceService],
 })
 export class InvoiceModule {}

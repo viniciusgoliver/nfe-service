@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="nfe">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="emitente">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="cnpj" type="xs:string" />
+							<xs:element name="nome" type="xs:string" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="destinatario">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="cnpj" type="xs:string" />
+							<xs:element name="nome" type="xs:string" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="valor" type="xs:decimal" />
+				<xs:element name="produtos" minOccurs="1" maxOccurs="1">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="produto" minOccurs="1" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="nome" type="xs:string" />
+										<xs:element name="quantidade" type="xs:int" />
+										<xs:element name="preco" type="xs:decimal" />
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="status" type="xs:string" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

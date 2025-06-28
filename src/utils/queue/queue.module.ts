@@ -8,6 +8,7 @@ import { BullAdapter } from 'bull-board/bullAdapter';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { redisConfig } from 'src/configs';
 import { AuthModule } from 'src/modules/auth/auth.module';
+import { InvoiceModule } from 'src/modules/invoice/invoice.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { AuthModule } from 'src/modules/auth/auth.module';
       useFactory: redisConfig,
     }),    
     forwardRef(() => AuthModule),
+    forwardRef(() => InvoiceModule)
   ],
   providers: [QueueProducerService, QueueConsumerService],
   exports: [QueueProducerService, QueueConsumerService, BullModule],

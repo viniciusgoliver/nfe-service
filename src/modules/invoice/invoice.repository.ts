@@ -10,6 +10,17 @@ export class InvoiceRepository {
   async create(createInvoiceDto: InvoiceCreateInvoiceDTO): Promise<any> {
     try {
       const { clientId, userId, items } = createInvoiceDto;
+      const priceProducts = await this.prismaService.product.findMany({
+        where: {
+          id: {
+            in: items.map((item) => item.productId),
+          },
+        },
+        select: {
+          id: true,
+          price: true,
+        },
+      });
       const created = await this.prismaService.invoice.create({
         data: {
           clientId,
@@ -19,7 +30,7 @@ export class InvoiceRepository {
             create: items.map((item) => ({
               productId: item.productId,
               quantity: item.quantity,
-              total: 0,
+              total: priceProducts.find((p) => p.id === item.productId)?.price * item.quantity || 0,
             })),
           },
         },
@@ -31,5 +42,36 @@ export class InvoiceRepository {
       throw err;
     }
   }
-  
+
+  async findById(id: string): Promise<any> {
+    return this.prismaService.invoice.findUnique({ where: { id } });
+  }
+
+  async findByIdXml(id: string): Promise<any> {
+    return this.prismaService.invoice.findUnique({ 
+      where: { id },
+      include: {
+        client: true,
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          }
+        },
+        items: {
+          include: {
+            product: true,
+          },
+        },
+      },
+    });
+  }
+
+  async updateStatus(id: string, status: InvoiceStatus, xml: string): Promise<any> {
+    return this.prismaService.invoice.update({
+      where: { id },
+      data: { status, xml },
+    });
+  }  
 }

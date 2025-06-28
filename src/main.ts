@@ -17,7 +17,7 @@ function generateSwaggerFile(app: INestApplication): void {
   options.setContact('Vinícius G. Oliveira', '', 'vinicius.oliver@gmail.com');
 
   const document = SwaggerModule.createDocument(app, options.build());
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('api/docs', app, document);
   fs.writeFileSync('./swagger-spec.json', JSON.stringify(document));
 }
 

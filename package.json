@@ -8,6 +8,7 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
+    "postbuild": "cp -r ./schemas dist/schemas",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
@@ -35,7 +36,7 @@
     "migrate:only": "prisma migrate dev --create-only",
     "migrate:deploy": "prisma migrate deploy",
     "start:migrate:prod": "prisma migrate deploy && npm run start:prod",
-    "docker:up": "DOCKER_BUILDKIT=0 docker-compose up -d --build",
+    "docker:up": "docker-compose up -d --build",
     "docker:down": "docker-compose down -v"
   },
   "engines": {
@@ -80,8 +81,10 @@
     "fs-extra": "^11.2.0",
     "generate-password": "^1.7.1",
     "handlebars": "^4.7.8",
+    "ioredis": "^5.6.1",
     "joi": "^17.13.1",
     "jwt-decode": "^4.0.0",
+    "libxmljs": "^1.0.11",
     "nest-winston": "^1.10.0",
     "nodemailer": "^7.0.3",
     "passport": "^0.7.0",
