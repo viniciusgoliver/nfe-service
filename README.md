@@ -1,6 +1,10 @@
 # NF-e Service
 
 ![CI](https://github.com/viniciusgoliver/nfe-service/actions/workflows/ci.yml/badge.svg)
+![Node](https://img.shields.io/badge/node-20+-brightgreen)
+![License](https://img.shields.io/github/license/viniciusgoliver/nfe-service)
+![Last Commit](https://img.shields.io/github/last-commit/viniciusgoliver/nfe-service)
+![Docker](https://img.shields.io/badge/docker-ready-blue)
 
 Microserviço para emissão e gerenciamento de Notas Fiscais Eletrônicas (NF-e), desenvolvido em Node.js (NestJS), Prisma ORM e PostgreSQL.
 
