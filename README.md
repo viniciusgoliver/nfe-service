@@ -29,6 +29,23 @@ Microserviço para emissão e gerenciamento de Notas Fiscais Eletrônicas (NF-e)
 
 ---
 
+## 🤖 Integração Contínua (CI/CD)
+
+Este projeto conta com **pipeline automatizado de CI/CD** usando **GitHub Actions** (`.github/workflows/ci.yml`).
+
+A cada push ou pull request, o pipeline executa automaticamente:
+
+- Instalação de dependências
+- Lint de código (`yarn lint`)
+- Build da aplicação
+- Testes unitários (`yarn test`)
+- Testes de integração/end-to-end (`yarn test:e2e`)
+- Sobe um banco de dados PostgreSQL isolado em container para os testes
+
+Isso garante qualidade, rastreabilidade e validação de todo código antes de ser integrado à branch principal.
+
+---
+
 ## 📝 Observações
 
 - **O serviço de envio à SEFAZ está simulado nesta versão.**
