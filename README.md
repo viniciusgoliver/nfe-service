@@ -210,6 +210,8 @@ Acesse a documentação Swagger:
 5. **Teste fluxos de erro: CNPJ inválido, produto inexistente, etc.**
 6. **Confira logs detalhados no terminal**
 
+---
+
 ## 🚦 **Passo a Passo: Fluxo Completo de Testes da NF-e**
 
 1. **Autentique-se na API para obter o token JWT**
@@ -303,4 +305,3 @@ Acesse a documentação Swagger:
 - As seeds são criadas automaticamente ao subir o projeto com o comando `yarn docker:up`.
 
 ---
-
