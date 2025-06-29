@@ -9,10 +9,11 @@ import { UserRole } from '@prisma/client'
 import { AuthResetPasswordDTO } from '../auth/dtos/reset-password.dto'
 import { UserUpdateDTO } from './dtos/user-update.dto'
 import { UserEntity } from './user.entity'
-import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger'
+import { ApiCreatedResponse, ApiExcludeController, ApiOkResponse, ApiTags } from '@nestjs/swagger'
 import { GetUser } from 'src/decorator/get-user.decorator'
 import { UserReturnUserinfoDTO } from './dtos/return-userinfo.dto'
 
+@ApiExcludeController()
 @Controller({ path: 'users', version: '1' })
 @ApiTags('users')
 export class UserController {

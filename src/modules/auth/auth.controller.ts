@@ -8,7 +8,7 @@ import { UserReturnUserinfoDTO } from '../user/dtos/return-userinfo.dto'
 import { GetUser } from '../../decorator/get-user.decorator'
 import { AuthResetPasswordDTO } from './dtos/reset-password.dto'
 import { AuthSendRecoverEmailDTO } from './dtos/send-recover-email.dto'
-import { ApiTags } from '@nestjs/swagger'
+import { ApiExcludeEndpoint, ApiTags } from '@nestjs/swagger'
 
 export class AuthRefreshTokenDTO {
   refresh_token: string
@@ -20,6 +20,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('signup')
+  @ApiExcludeEndpoint()
   async signUp(@Body(ValidationPipe) userDto: UserCreateDTO): Promise<{ status: string; message: string }> {
     await this.authService.signUp(userDto)
     return {
@@ -34,18 +35,21 @@ export class AuthController {
   }
 
   @Post('refresh')
+  @ApiExcludeEndpoint()
   @UseGuards(AuthGuard())
   async refresh(@Body(ValidationPipe) data: AuthRefreshTokenDTO): Promise<AuthReturnAuthUserDTO> {
     return await this.authService.refresh(data.refresh_token)
   }
 
   @Get('userinfo')
+  @ApiExcludeEndpoint()
   @UseGuards(AuthGuard())
   async getUserinfo(@GetUser() user: UserReturnUserinfoDTO): Promise<UserReturnUserinfoDTO> {
     return user
   }
 
   @Get('logout')
+  @ApiExcludeEndpoint()
   @UseGuards(AuthGuard())
   async logout(@GetUser() user: UserReturnUserinfoDTO): Promise<{ message: string }> {
     await this.authService.logout(user)
@@ -55,6 +59,7 @@ export class AuthController {
   }
 
   @Get('/confirmation/:token')
+  @ApiExcludeEndpoint()
   async confirmationEmail(@Param('token') token: string): Promise<{ status: string; message: string }> {
     await this.authService.confirmationEmail(token)
     return {
@@ -64,6 +69,7 @@ export class AuthController {
   }
 
   @Post('/send-recover-email')
+  @ApiExcludeEndpoint()
   async sendRecoverPasswordEmail(
     @Body(ValidationPipe) sendRecoverEmailDTO: AuthSendRecoverEmailDTO
   ): Promise<{ status: string; message: string }> {
@@ -76,6 +82,7 @@ export class AuthController {
   }
 
   @Patch('/reset-password/:token')
+  @ApiExcludeEndpoint()
   async resetPassword(
     @Param('token') token: string,
     @Body(ValidationPipe) data: AuthResetPasswordDTO

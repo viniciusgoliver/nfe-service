@@ -7,8 +7,9 @@ import { RolesGuard } from '../../guards/roles.guard'
 import { Role } from '../../decorator/role.decorator'
 import { UserRole } from '@prisma/client'
 import { SessionUserEntity } from './session-user.entity'
-import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger'
+import { ApiCreatedResponse, ApiExcludeController, ApiOkResponse, ApiTags } from '@nestjs/swagger'
 
+@ApiExcludeController()
 @Controller({ path: 'session-users', version: '1' })
 @ApiTags('session-users')
 export class SessionUserController {
