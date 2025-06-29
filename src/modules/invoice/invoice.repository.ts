@@ -3,7 +3,7 @@ import { PrismaService } from '../prisma/prisma.service'
 import { InvoiceStatus } from '@prisma/client'
 import { type InvoiceCreateInvoiceDTO } from './dtos/create-invoice.dto'
 import { type ReturnClientDTO } from './dtos/return-client.dto'
-import { WebhookRetornoSefazDTO } from './dtos/webhook-retorno-sefaz.dto'
+import { type WebhookRetornoSefazDTO } from './dtos/webhook-retorno-sefaz.dto'
 
 @Injectable()
 export class InvoiceRepository {
@@ -66,12 +66,26 @@ export class InvoiceRepository {
     })
   }
 
-  async updateStatus(dto: WebhookRetornoSefazDTO,): Promise<any> {
+  async updateStatus(dto: WebhookRetornoSefazDTO): Promise<any> {
+    const { invoiceId, status, protocol, message, xml } = dto
+
+    return this.prismaService.invoice.update({
+      where: { id: invoiceId },
+      data: {
+        status,
+        xml: xml ?? '',
+        protocol,
+        message
+      }
+    })
+  }
+
+  async updateStatusWebhook(dto: WebhookRetornoSefazDTO): Promise<any> {
     const { invoiceId: id, status, protocol, message } = dto
     return this.prismaService.invoice.update({
       where: { id },
       data: {
-        status,        
+        status,
         protocol,
         message
       }

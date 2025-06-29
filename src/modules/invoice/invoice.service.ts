@@ -104,14 +104,8 @@ export class InvoiceService {
     return invoice.xml
   }
 
-  async updateStatus(
-    id: string,
-    status: InvoiceStatus,
-    xml: string,
-    protocol?: string,
-    message?: string
-  ): Promise<any> {
-    const invoice = await this.invoiceRepository.updateStatus(id, status, xml, protocol, message)
+  async updateStatus(dto: WebhookRetornoSefazDTO): Promise<any> {
+    const invoice = await this.invoiceRepository.updateStatus(dto)
     if (!invoice) {
       throw new UnprocessableEntityException('Fatura não encontrada')
     }
@@ -120,7 +114,7 @@ export class InvoiceService {
 
   async processSefazCallback(dto: WebhookRetornoSefazDTO): Promise<void> {
     const { invoiceId, status } = dto
-    await this.invoiceRepository.updateStatus(dto)
+    await this.invoiceRepository.updateStatusWebhook(dto)
     this.logger.log(`Callback SEFAZ processado para NF-e ${invoiceId}: ${status}`)
   }
 }

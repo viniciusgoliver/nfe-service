@@ -38,25 +38,41 @@ class QueueConsumerService {
     const status = Math.random() > 0.2 ? InvoiceStatus.AUTHORIZED : InvoiceStatus.REJECTED
     let xml = ''
 
-    if (status === InvoiceStatus.AUTHORIZED) {
-      const data: InvoiceXmlDataDTO = {
-        client: {
-          cnpj: invoice.client.cnpj,
-          name: invoice.client.name
-        },
-        items: invoice.items.map((item) => ({
-          name: item.product.name,
-          quantity: item.quantity,
-          price: item.product.price
-        })),
-        status: InvoiceStatus.AUTHORIZED,
-        valor: invoice.items.reduce((acc, item) => acc + item.total, 0)
-      }
-
-      xml = xmlLayout(data)
+    const data: InvoiceXmlDataDTO = {
+      client: {
+        cnpj: invoice.client.cnpj,
+        name: invoice.client.name
+      },
+      items: invoice.items.map((item) => ({
+        name: item.product.name,
+        quantity: item.quantity,
+        price: item.product.price
+      })),
+      status,
+      valor: invoice.items.reduce((acc, item) => acc + item.total, 0)
     }
 
-    await this.invoiceService.updateStatus(invoice.id, status, xml)
+    if (status === InvoiceStatus.AUTHORIZED) {
+      xml = xmlLayout(data)
+    } else if (invoice.status === InvoiceStatus.REJECTED) {
+      xml = `<nfe>
+        <status>${invoice.status}</status>
+        <message>${invoice.message ?? 'NF-e rejeitada'}</message>
+      </nfe>`
+    } else {
+      xml = `<nfe>
+        <status>${invoice.status}</status>
+        <message>${invoice.message ?? 'NF-e em processamento'}</message>
+      </nfe>`
+    }
+
+    await this.invoiceService.updateStatus({
+      invoiceId: invoice.id,
+      status,
+      protocol: `NFPROC${Math.floor(10000000 + Math.random() * 90000000)}`,
+      xml,
+      message: `NOTA PROCESSADA COM COM STATUS: ${status}`
+    })
   }
 
   @OnQueueCompleted()
