@@ -1,13 +1,24 @@
-import { Controller, Post, Body, ValidationPipe, UseGuards, Get, Param, Res, HttpCode } from '@nestjs/common'
+import {
+  Controller,
+  Post,
+  Body,
+  ValidationPipe,
+  UseGuards,
+  Get,
+  Param,
+  Res,
+  HttpCode,
+  HttpStatus
+} from '@nestjs/common'
 import { InvoiceCreateInvoiceDTO } from './dtos/create-invoice.dto'
 import { InvoiceService } from './invoice.service'
 import { AuthGuard } from '@nestjs/passport'
 import { RolesGuard } from '../../guards/roles.guard'
 import { Role } from '../../decorator/role.decorator'
-import { UserRole } from '@prisma/client'
 import { InvoiceEntity } from './invoice.entity'
-import { ApiBody, ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
+import { ApiBody, ApiCreatedResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { WebhookRetornoSefazDTO } from './dtos/webhook-retorno-sefaz.dto'
+import { UserRole } from '@prisma/client'
 
 @Controller({ path: 'nfe', version: '1' })
 @ApiTags('nfe')
@@ -47,13 +58,31 @@ export class InvoiceController {
     return invoice
   }
 
-  @Post('/webhook/retorno-sefaz')
-  @ApiOperation({ summary: 'Recebe retorno (simulado) da SEFAZ e atualiza status da NF-e' })
-  @ApiBody({ type: WebhookRetornoSefazDTO })
-  @HttpCode(200)
-  async retornoSefaz(@Body() body: WebhookRetornoSefazDTO) {
-    const { invoiceId, status, protocol, xml, message } = body;
-    await this.invoiceService.processSefazCallback(invoiceId, status, protocol, xml, message);
-    return { status: 'ok', invoiceId };
+  @Post('webhook/retorno-sefaz')
+  @ApiOperation({
+    summary: 'Recebe retorno (simulado) da SEFAZ e atualiza status da NF-e'
+  })
+  @ApiBody({
+    description: 'Payload enviado pela SEFAZ com o resultado da emissão',
+    type: WebhookRetornoSefazDTO
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Callback processado com sucesso',
+    type: WebhookRetornoSefazDTO
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Payload inválido ou dados faltando'
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'NF-e não encontrada para o invoiceId informado'
+  })
+  @HttpCode(HttpStatus.OK)
+  async retornoSefaz(@Body() body: WebhookRetornoSefazDTO): Promise<WebhookRetornoSefazDTO> {
+    const { invoiceId, status } = body
+    await this.invoiceService.processSefazCallback(body)
+    return { status, invoiceId }
   }
 }

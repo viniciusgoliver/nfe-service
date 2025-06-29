@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../prisma/prisma.service'
 import { InvoiceStatus } from '@prisma/client'
 import { type InvoiceCreateInvoiceDTO } from './dtos/create-invoice.dto'
+import { type ReturnClientDTO } from './dtos/return-client.dto'
 
 @Injectable()
 export class InvoiceRepository {
@@ -64,19 +65,32 @@ export class InvoiceRepository {
     })
   }
 
-  async updateStatus(id: string,
+  async updateStatus(
+    id: string,
     status: InvoiceStatus,
     xml?: string,
     protocol?: string,
-    message?: string): Promise<any> {
-      return this.prismaService.invoice.update({
-        where: { id },
-        data: {
-          status,
-          xml,
-          protocol,
-          message,
-        },
-      });
+    message?: string
+  ): Promise<any> {
+    return this.prismaService.invoice.update({
+      where: { id },
+      data: {
+        status,
+        xml,
+        protocol,
+        message
+      }
+    })
+  }
+
+  async findClientById(clientId: string): Promise<ReturnClientDTO | null> {
+    return this.prismaService.client.findUnique({ where: { id: clientId } })
+  }
+
+  async findProductsByIds(ids: string[]): Promise<Array<{ id: string; price: number }>> {
+    return this.prismaService.product.findMany({
+      where: { id: { in: ids } },
+      select: { id: true, price: true }
+    })
   }
 }

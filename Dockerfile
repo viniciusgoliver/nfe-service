@@ -39,4 +39,4 @@ ENV NODE_ENV=production
 ENV LISTEN_PORT=3000
 EXPOSE 3000
 
-CMD [ "yarn", "start:prod" ]
+CMD ["sh", "-c", "yarn migrate:deploy && yarn seed && yarn start:prod"]

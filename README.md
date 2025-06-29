@@ -86,6 +86,8 @@ cd nfe-service
 
 cp dev.env .env
 
-docker-compose up --build
+yarn docker:up
 
-docker-compose exec app npx prisma migrate deploy
+yarn migrate:deploy
+
+
