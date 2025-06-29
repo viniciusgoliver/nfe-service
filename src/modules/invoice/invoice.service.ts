@@ -119,8 +119,8 @@ export class InvoiceService {
   }
 
   async processSefazCallback(dto: WebhookRetornoSefazDTO): Promise<void> {
-    const { invoiceId, status, protocol, xml, message } = dto
-    await this.invoiceRepository.updateStatus(invoiceId, status as InvoiceStatus, xml ?? '', protocol, message)
+    const { invoiceId, status } = dto
+    await this.invoiceRepository.updateStatus(dto)
     this.logger.log(`Callback SEFAZ processado para NF-e ${invoiceId}: ${status}`)
   }
 }
